@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osborneferds - Digital Business Card</title>
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --secondary: #4f46e5;
+            --secondary-dark: #4338ca;
+            --purple-light: #f3f0ff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+            --whatsapp-green: #25D366;
+            --calendar-blue: #3b82f6;
+            --contacts-color: #3b82f6;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body {
+            background: linear-gradient(135deg, var(--gray-50), #e0e7ff);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--gray-800);
+            line-height: 1.6;
+            padding-bottom: 2rem;
+        }
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 0 1.25rem;
+        }
+        .mobile-frame {
+            background: var(--white);
+            border-radius: 28px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            margin-top: 1.5rem;
+            position: relative;
+            min-height: 900px;
+            display: flex;
+            flex-direction: column;
+        }
+        .mobile-header {
+            background: var(--white);
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .mobile-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            text-align: center;
+        }
+        .admin-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+            cursor: pointer;
+            opacity: 0.5;
+            font-size: 20px;
+        }
+        .admin-toggle:hover {
+            opacity: 1;
+        }
+        .mobile-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 1.25rem;
+            background: var(--purple-light);
+            position: relative;
+        }
+        .header-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px 16px 0 0;
+            margin-bottom: 1rem;
+        }
+        .profile-circle {
+            position: absolute;
+            top: 60px;
+            left: 16px;
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            border: 3px solid var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .profile-circle:hover {
+            transform: translateY(-2px);
+        }
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+        }
+        .upload-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--primary);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            z-index: 3;
+        }
+        .upload-overlay:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+        #avatar-upload {
+            display: none;
+        }
+        .name-section {
+            margin-top: 2rem;
+            padding: 0 16px;
+        }
+        .name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+        .title {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        @media (min-width: 480px) {
+            .action-buttons { grid-template-columns: repeat(4, 1fr); }
+        }
+        .action-btn {
+            min-height: 52px;
+            padding: 0.5rem 0.25rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .whatsapp-btn { background: linear-gradient(135deg, var(--whatsapp-green), #128C7E); }
+        .website-btn { background: linear-gradient(135deg, var(--calendar-blue), #2563eb); }
+        .contacts-btn { background: linear-gradient(135deg, var(--contacts-color), #2563eb); }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            color: var(--white);
+            text-decoration: none;
+        }
+        .contact-info {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .contact-item:last-child { border-bottom: none; }
+        .contact-icon {
+            color: var(--gray-500);
+            font-size: 1rem;
+            width: 24px;
+            text-align: center;
+        }
+        .contact-text {
+            color: var(--gray-700);
+            flex: 1;
+            word-break: break-word;
+            font-size: 0.875rem;
+        }
+        .whatsapp-icon { color: var(--whatsapp-green); }
+        .services-section {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+        .services-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+        }
+        .service-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 0.5rem;
+            background: var(--purple-light);
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+        .service-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        .service-icon {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        .service-name {
+            font-size: 0.75rem;
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+        .portfolio-section,
+        .booking-section,
+        .reviews-section {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.25rem 1rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+        .portfolio-title,
+        .booking-title,
+        .reviews-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        /* === PORTFOLIO MODERNIZATION === */
+        .portfolio-buttons {
+            display: flex;
+            justify-content: center;
+        }
+        .portfolio-link.primary-link {
+            background: linear-gradient(135deg, var(--gray-800), var(--gray-900));
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            gap: 0.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .portfolio-link.primary-link:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* === BOOKING MODERNIZATION === */
+        .booking-btn.modern-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--calendar-blue), #1d4ed8);
+            padding: 0.875rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            color: var(--white);
+            text-decoration: none;
+            width: 100%;
+        }
+        .booking-btn.modern-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* === REVIEWS MODERNIZATION === */
+        .review-preview {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .stars {
+            color: #fbbf24;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .review-excerpt {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-style: italic;
+            margin: 0.5rem 0;
+        }
+        .review-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .review-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        .review-btn.primary {
+            background: linear-gradient(135deg, var(--gray-800), var(--gray-900));
+            color: var(--white);
+        }
+        .review-btn.secondary {
+            background: var(--purple-light);
+            color: var(--primary);
+            border: 1px solid var(--gray-300);
+        }
+        .review-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        .review-btn.secondary:hover {
+            background: #eef2ff;
+        }
+
+        .pricing-section {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.25rem 1rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+        .pricing-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            text-align: center;
+        }
+        .pricing-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .pricing-card {
+            background: var(--purple-light);
+            border-radius: 14px;
+            padding: 1.25rem;
+            border: 2px solid transparent;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .pricing-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+        .pricing-card.popular {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(79, 70, 229, 0.1));
+        }
+        .popular-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 0.625rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            transform: rotate(15deg);
+        }
+        .pricing-name { font-size: 1.125rem; font-weight: 700; color: var(--gray-800); margin-bottom: 0.5rem; }
+        .pricing-price { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem; }
+        .pricing-feature { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--gray-700); }
+        .pricing-feature i { color: var(--primary); font-size: 0.875rem; }
+        .pricing-btn {
+            width: 100%;
+            padding: 0.625rem;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .pricing-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-600);
+            font-size: 1rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+        .social-icon:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            color: var(--gray-600);
+            text-decoration: none;
+        }
+        .twitter { color: #1DA1F2; }
+        .linkedin { color: #0A66C2; }
+        .footer {
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+            font-weight: 500;
+        }
+        /* Admin Panel */
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            display: none;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .admin-content {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            max-width: 500px;
+            margin: 0 auto;
+            color: var(--gray-800);
+        }
+        .admin-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 0.5rem;
+        }
+        .tab-btn {
+            padding: 0.4rem 0.8rem;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 6px 6px 0 0;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .admin-content h2 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        .admin-group {
+            margin-bottom: 1rem;
+        }
+        .admin-group label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        .admin-group input, .admin-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+        }
+        .admin-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .admin-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .save-btn {
+            background: var(--primary);
+            color: white;
+        }
+        .cancel-btn {
+            background: var(--gray-200);
+            color: var(--gray-800);
+        }
+        /* Analytics */
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .analytics-date {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+        .analytics-actions button {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            background: var(--gray-200);
+            color: var(--gray-700);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .analytics-actions button:hover {
+            background: var(--gray-300);
+        }
+        .analytics-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .metric-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .metric-card.popular {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(79, 70, 229, 0.05));
+        }
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 0.75rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+        }
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            line-height: 1;
+        }
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin-top: 0.25rem;
+        }
+        .icon-pageviews { background: rgba(124, 58, 237, 0.1); color: var(--primary); }
+        .icon-vcard { background: rgba(59, 130, 246, 0.1); color: var(--calendar-blue); }
+        .icon-shares { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .icon-whatsapp { background: rgba(37, 211, 102, 0.1); color: var(--whatsapp-green); }
+        .icon-portfolio { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+        .icon-starter { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .icon-professional { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
+        .icon-enterprise { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mobile-frame">
+            <div class="mobile-header">
+                <div class="mobile-title">Freelancer - DigitalCard</div>
+                <div class="admin-toggle" onclick="promptAdmin()">⚙️</div>
+            </div>
+            <div class="mobile-content">
+                <div class="header-image">
+                    <div class="profile-circle">
+                        <!-- ✅ Static profile image – replace src with your own -->
+                        <img id="profile-image" class="profile-avatar" 
+                             src="https://osborneferds.github.io/Digital-Card/photo.png"
+                             alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="name-section">
+                <h1 class="name" id="editable-name">Osborne Fernandes</h1>
+                <p class="title" id="editable-title">Senior Developer | AI & IT Infrastructure | 20+ Years Full-Stack & Hardware</p>
+            </div>
+            <div class="action-buttons">
+                <a href="https://osborneferds.github.io/Freelancer/" 
+                   target="_blank" rel="noopener noreferrer"
+                   class="action-btn website-btn">
+                    <i class="fas fa-globe"></i>
+                    <span>Website</span>
+                </a>
+                <button class="action-btn" onclick="shareCard()">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Share</span>
+                </button>
+                <button class="action-btn whatsapp-btn" onclick="contactWhatsApp()">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </button>
+                <button class="action-btn contacts-btn" onclick="downloadVCard()">
+                    <i class="fas fa-address-book"></i>
+                    <span>Add to Contacts</span>
+                </button>
+            </div>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                    <span class="contact-text" id="editable-phone">+63 9975849230</span>
+                    <div class="contact-icon whatsapp-icon"><i class="fab fa-whatsapp"></i></div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <span class="contact-text" id="editable-email">osbornefernds@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-globe"></i></div>
+                    <span class="contact-text">https://osborneferds.github.io/Freelancer/</span>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <span class="contact-text">Angat, Bulacan - Philippines</span>
+                </div>
+            </div>
+            <div class="services-section">
+                <div class="services-title">Our Services</div>
+                <div class="services-grid" id="editable-services-grid">
+                    <div class="service-item"><div class="service-icon"><i class="fas fa-sync fa-spin"></i></div><div class="service-name">Loading...</div></div>
+                </div>
+            </div>
+            <!-- === PORTFOLIO SECTION === -->
+            <div class="portfolio-section">
+                <div class="portfolio-title">Portfolio</div>
+                <div class="portfolio-buttons">
+                    <a href="https://drive.google.com/file/d/1dtaRhKo9eQMBgtAAGQc9XVpugkTS8VkP/view?usp=drive_link"
+                       target="_blank" rel="noopener noreferrer"
+                       class="portfolio-link primary-link"
+                       id="portfolio-view-link">
+                        <i class="fas fa-file-alt"></i> View Portfolio
+                    </a>
+                </div>
+            </div>
+            <div class="pricing-section">
+                <div class="pricing-title">Service Packages</div>
+                <div class="pricing-cards" id="editable-pricing-cards">
+                    <div style="text-align:center;color:var(--gray-500);padding:1rem;">Loading packages...</div>
+                </div>
+            </div>
+            <!-- === BOOKING SECTION === -->
+            <div class="booking-section">
+                <div class="booking-title">Book a Meeting</div>
+                <a href="https://calendar.app.google/qCop8E4643j7VxVT9"
+                   target="_blank" rel="noopener noreferrer"
+                   class="booking-btn modern-btn">
+                    <i class="fas fa-calendar-check"></i> Schedule a Call
+                </a>
+            </div>
+            <!-- === REVIEWS SECTION === -->
+            <div class="reviews-section">
+                <div class="reviews-title">Google Reviews</div>
+                <div class="review-preview">
+                    <div class="stars">
+                        <i class="fas fa-star filled"></i>
+                        <i class="fas fa-star filled"></i>
+                        <i class="fas fa-star filled"></i>
+                        <i class="fas fa-star filled"></i>
+                        <i class="fas fa-star filled"></i>
+                    </div>
+                    <p class="review-excerpt">"Highly skilled developer — delivered beyond expectations!"</p>
+                </div>
+                <div class="review-actions">
+                    <a href="https://share.google/E7vM02AaJmbq260Ms"
+                       target="_blank" rel="noopener noreferrer"
+                       class="review-btn primary">
+                        <i class="fas fa-eye"></i> View All Reviews
+                    </a>
+                    <a href="https://share.google/E7vM02AaJmbq260Ms"
+                       target="_blank" rel="noopener noreferrer"
+                       class="review-btn secondary"
+                       onclick="trackEvent('reviewSubmission')">
+                        <i class="fas fa-star"></i> Write a Review
+                    </a>
+                </div>
+            </div>
+            <div class="social-icons">
+                <a href="https://twitter.com/osborneferds" class="social-icon twitter" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/osborneferds/" class="social-icon linkedin" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </div>
+            <div class="footer">
+                <p>Osborneferds <i class="fas fa-certificate"></i> DigitalCard  </p>
+            </div>
+        </div>
+    </div>
+    <script>
+        // ============== SAFE LOCALSTORAGE ==============
+        function safeGet(key, fallback) {
+            try {
+                return JSON.parse(localStorage.getItem(key)) || fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
+        function safeSet(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+        // ============== ANALYTICS ==============
+        function initAnalytics() {
+            const today = new Date().toDateString();
+            let analytics = safeGet('businessCardAnalytics', {});
+            if (analytics.date !== today) {
+                analytics = {
+                    date: today,
+                    pageViews: 0,
+                    vCardDownloads: 0,
+                    shares: 0,
+                    whatsappClicks: 0,
+                    starterClicks: 0,
+                    professionalClicks: 0,
+                    enterpriseClicks: 0,
+                    portfolioViews: 0
+                };
+            }
+            analytics.pageViews = (analytics.pageViews || 0) + 1;
+            safeSet('businessCardAnalytics', analytics);
+        }
+        function trackEvent(eventType) {
+            const today = new Date().toDateString();
+            let analytics = safeGet('businessCardAnalytics', {});
+            if (analytics.date !== today) {
+                analytics = {
+                    date: today,
+                    pageViews: 0,
+                    vCardDownloads: 0,
+                    shares: 0,
+                    whatsappClicks: 0,
+                    starterClicks: 0,
+                    professionalClicks: 0,
+                    enterpriseClicks: 0,
+                    portfolioViews: 0,
+                    reviewSubmission: 0
+                };
+            }
+            analytics[eventType] = (analytics[eventType] || 0) + 1;
+            safeSet('businessCardAnalytics', analytics);
+        }
+        function resetAnalyticsToday() {
+            if (confirm("Reset today's analytics data?")) {
+                const today = new Date().toDateString();
+                safeSet('businessCardAnalytics', {
+                    date: today,
+                    pageViews: 0,
+                    vCardDownloads: 0,
+                    shares: 0,
+                    whatsappClicks: 0,
+                    starterClicks: 0,
+                    professionalClicks: 0,
+                    enterpriseClicks: 0,
+                    portfolioViews: 0,
+                    reviewSubmission: 0
+                });
+                alert("Analytics reset for today.");
+                location.reload();
+            }
+        }
+        // ============== DEFAULT DATA ==============
+        const DEFAULT_DATA = {
+            name: "Osborne Fernandes",
+            title: "Senior Developer | AI & IT Infrastructure | 20+ Years Full-Stack & Hardware",
+            phone: "+63 9975849230",
+            email: "osbornefernds@gmail.com",
+            whatsapp: "971505280169",
+            website: "https://osborneferds.github.io/Freelancer/",
+            portfolio: "https://drive.google.com/file/d/1dtaRhKo9eQMBgtAAGQc9XVpugkTS8VkP/view?usp=drive_link",
+            services: ["AI Chatbot", "Mobile App", "Software Dev", "Web App", "AI Development", "Digital Design", "CCTV Install", "Laptop Repair"],
+            packages: {
+                starter: {
+                    name: "Starter Package",
+                    price: "$137",
+                    features: ["Your Service", "Your Portfolio", "Basic Support Included"]
+                },
+                professional: {
+                    name: "Professional Package",
+                    price: "$275",
+                    features: [
+                        "Your Service", "Your Portfolio", "Service Pricing & Packages",
+                        "Google Map Location", "Book A Meeting", "Analytics Integration", "One Custom Feature"
+                    ]
+                },
+                enterprise: {
+                    name: "Enterprise Package",
+                    price: "Custom Pricing",
+                    features: [
+                        "Your Service", "Your Portfolio", "Service Pricing & Packages", "Shopping Cart",
+                        "Google Maps Location", "Book A Meeting", "Performance Monitoring", "Analytics Integration",
+                        "Google Review Integration", "Design Portfolio Gallery", "Progressive Web App (PWA)", "Custom Features"
+                    ]
+                }
+            }
+        };
+        // ============== ADMIN PANEL ======================
+        function promptAdmin() {
+            if (document.getElementById('adminAuthPanel')) return;
+            const authHTML = `
+                <div id="adminAuthPanel" class="admin-panel" style="display:flex;align-items:center;justify-content:center;">
+                    <div style="background:white;padding:1.5rem;border-radius:16px;max-width:300px;width:90%;">
+                        <h3 style="margin-bottom:1rem;color:var(--primary);">Admin Access</h3>
+                        <div class="admin-group">
+                            <label>Enter PIN</label>
+                            <input type="password" id="admin-pin-input" placeholder="••••" style="width:100%;padding:0.5rem;border:1px solid var(--gray-300);border-radius:8px;font-size:1rem;">
+                        </div>
+                        <div class="admin-actions" style="margin-top:1rem;">
+                            <button class="admin-btn save-btn" onclick="verifyAdminPin()">Unlock</button>
+                            <button class="admin-btn cancel-btn" onclick="closeAdminAuth()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', authHTML);
+        }
+        function verifyAdminPin() {
+            const pin = document.getElementById('admin-pin-input').value;
+            if (pin === "1234") {
+                closeAdminAuth();
+                showAdminPanel();
+            } else {
+                alert("Incorrect PIN.");
+            }
+        }
+        function closeAdminAuth() {
+            const panel = document.getElementById('adminAuthPanel');
+            if (panel) panel.remove();
+        }
+        function showAdminPanel() {
+            const data = safeGet('businessCardData', {});
+            const analytics = safeGet('businessCardAnalytics', {});
+            const today = new Date().toDateString();
+            const isToday = analytics.date === today;
+            const services = (data.services || DEFAULT_DATA.services).join(', ');
+            const packages = data.packages || DEFAULT_DATA.packages;
+            const html = `
+                <div class="admin-content">
+                    <div class="admin-tabs">
+                        <button class="tab-btn active" data-tab="edit">Edit Content</button>
+                        <button class="tab-btn" data-tab="analytics">Analytics</button>
+                    </div>
+                    <div class="tab-content active" id="edit-tab">
+                        <h2>Edit Business Card</h2>
+                        <div class="admin-group">
+                            <label>Name</label>
+                            <input type="text" id="edit-name" value="${escapeHtml(data.name || DEFAULT_DATA.name)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Title</label>
+                            <input type="text" id="edit-title" value="${escapeHtml(data.title || DEFAULT_DATA.title)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Phone</label>
+                            <input type="text" id="edit-phone" value="${escapeHtml(data.phone || DEFAULT_DATA.phone)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Email</label>
+                            <input type="text" id="edit-email" value="${escapeHtml(data.email || DEFAULT_DATA.email)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>WhatsApp</label>
+                            <input type="text" id="edit-whatsapp" value="${escapeHtml(data.whatsapp || DEFAULT_DATA.whatsapp)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Website</label>
+                            <input type="text" id="edit-website" value="${escapeHtml(data.website || DEFAULT_DATA.website)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Portfolio Link</label>
+                            <input type="text" id="edit-portfolio" value="${escapeHtml(data.portfolio || DEFAULT_DATA.portfolio)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Services (comma-separated)</label>
+                            <textarea id="edit-services" rows="2">${escapeHtml(services)}</textarea>
+                        </div>
+                        <h3 style="margin: 1.5rem 0 1rem; color: var(--primary);">Service Packages</h3>
+                        <div class="admin-group">
+                            <label>Starter Name</label>
+                            <input type="text" id="edit-starter-name" value="${escapeHtml(packages.starter.name)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Starter Price</label>
+                            <input type="text" id="edit-starter-price" value="${escapeHtml(packages.starter.price)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Starter Features (one per line)</label>
+                            <textarea id="edit-starter-features" rows="3">${escapeHtml(packages.starter.features.join('\n'))}</textarea>
+                        </div>
+                        <div class="admin-group">
+                            <label>Professional Name</label>
+                            <input type="text" id="edit-pro-name" value="${escapeHtml(packages.professional.name)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Professional Price</label>
+                            <input type="text" id="edit-pro-price" value="${escapeHtml(packages.professional.price)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Professional Features (one per line)</label>
+                            <textarea id="edit-pro-features" rows="4">${escapeHtml(packages.professional.features.join('\n'))}</textarea>
+                        </div>
+                        <div class="admin-group">
+                            <label>Enterprise Name</label>
+                            <input type="text" id="edit-enterprise-name" value="${escapeHtml(packages.enterprise.name)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Enterprise Price</label>
+                            <input type="text" id="edit-enterprise-price" value="${escapeHtml(packages.enterprise.price)}">
+                        </div>
+                        <div class="admin-group">
+                            <label>Enterprise Features (one per line)</label>
+                            <textarea id="edit-enterprise-features" rows="6">${escapeHtml(packages.enterprise.features.join('\n'))}</textarea>
+                        </div>
+                        <div class="admin-actions">
+                            <button class="admin-btn save-btn" onclick="saveData()">Save</button>
+                            <button class="admin-btn cancel-btn" onclick="hideAdminPanel()">Cancel</button>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="analytics-tab">
+                        <h2>Analytics Dashboard</h2>
+                        <div class="analytics-header">
+                            <div class="analytics-date">Data for: ${analytics.date || 'Today'}</div>
+                            <div class="analytics-actions">
+                                <button onclick="resetAnalyticsToday()">Reset Today</button>
+                            </div>
+                        </div>
+                        <div class="analytics-metrics">
+                            <div class="metric-card">
+                                <div class="metric-icon icon-pageviews"><i class="fas fa-eye"></i></div>
+                                <div class="metric-value">${isToday ? (analytics.pageViews || 0) : 0}</div>
+                                <div class="metric-label">Page Views</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon icon-vcard"><i class="fas fa-address-card"></i></div>
+                                <div class="metric-value">${isToday ? (analytics.vCardDownloads || 0) : 0}</div>
+                                <div class="metric-label">vCard Downloads</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon icon-shares"><i class="fas fa-share-alt"></i></div>
+                                <div class="metric-value">${isToday ? (analytics.shares || 0) : 0}</div>
+                                <div class="metric-label">Shares</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon icon-whatsapp"><i class="fab fa-whatsapp"></i></div>
+                                <div class="metric-value">${isToday ? (analytics.whatsappClicks || 0) : 0}</div>
+                                <div class="metric-label">WhatsApp Clicks</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon icon-portfolio"><i class="fas fa-folder-open"></i></div>
+                                <div class="metric-value">${isToday ? (analytics.portfolioViews || 0) : 0}</div>
+                                <div class="metric-label">Portfolio Views</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon icon-starter"><i class="fas fa-box"></i></div>
+                                <div class="metric-value">${isToday ? (analytics.starterClicks || 0) : 0}</div>
+                                <div class="metric-label">Starter</div>
+                            </div>
+                            <div class="metric-card popular">
+                                <div class="metric-icon icon-professional"><i class="fas fa-award"></i></div>
+                                <div class="metric-value">${isToday ? (analytics.professionalClicks || 0) : 0}</div>
+                                <div class="metric-label">Professional</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-icon icon-enterprise"><i class="fas fa-building"></i></div>
+                                <div class="metric-value">${isToday ? (analytics.enterpriseClicks || 0) : 0}</div>
+                                <div class="metric-label">Enterprise</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--gray-600);">
+                            <p>📊 Data resets daily. Stored only in this browser.</p>
+                        </div>
+                        <div class="admin-actions" style="margin-top: 1rem;">
+                            <button class="admin-btn cancel-btn" onclick="hideAdminPanel()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', `<div id="adminPanel" class="admin-panel">${html}</div>`);
+            document.getElementById('adminPanel').style.display = 'block';
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    btn.classList.add('active');
+                    const tab = btn.dataset.tab;
+                    document.getElementById(`${tab}-tab`).classList.add('active');
+                });
+            });
+        }
+        function hideAdminPanel() {
+            const panel = document.getElementById('adminPanel');
+            if (panel) panel.remove();
+        }
+        function saveData() {
+            const services = document.getElementById('edit-services').value
+                .split(',')
+                .map(s => s.trim())
+                .filter(s => s);
+            const starterFeatures = document.getElementById('edit-starter-features').value
+                .split('\n')
+                .map(s => s.trim())
+                .filter(s => s);
+            const proFeatures = document.getElementById('edit-pro-features').value
+                .split('\n')
+                .map(s => s.trim())
+                .filter(s => s);
+            const enterpriseFeatures = document.getElementById('edit-enterprise-features').value
+                .split('\n')
+                .map(s => s.trim())
+                .filter(s => s);
+            const data = {
+                name: document.getElementById('edit-name').value,
+                title: document.getElementById('edit-title').value,
+                phone: document.getElementById('edit-phone').value,
+                email: document.getElementById('edit-email').value,
+                whatsapp: document.getElementById('edit-whatsapp').value,
+                website: document.getElementById('edit-website').value,
+                portfolio: document.getElementById('edit-portfolio').value,
+                services: services,
+                packages: {
+                    starter: {
+                        name: document.getElementById('edit-starter-name').value,
+                        price: document.getElementById('edit-starter-price').value,
+                        features: starterFeatures
+                    },
+                    professional: {
+                        name: document.getElementById('edit-pro-name').value,
+                        price: document.getElementById('edit-pro-price').value,
+                        features: proFeatures
+                    },
+                    enterprise: {
+                        name: document.getElementById('edit-enterprise-name').value,
+                        price: document.getElementById('edit-enterprise-price').value,
+                        features: enterpriseFeatures
+                    }
+                }
+            };
+            const saved = safeSet('businessCardData', data);
+            hideAdminPanel();
+            applyDataToDOM(data);
+            if (!saved) {
+                alert('Changes saved for this session only.');
+            }
+        }
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        // ============== APPLY DATA TO DOM ==============
+        function applyDataToDOM(data) {
+            document.getElementById('editable-name').textContent = data.name;
+            document.getElementById('editable-title').textContent = data.title;
+            document.getElementById('editable-phone').textContent = data.phone;
+            document.getElementById('editable-email').textContent = data.email;
+            const websiteEl = document.querySelector('.contact-item .contact-text:nth-of-type(2)');
+            if (websiteEl) websiteEl.textContent = data.website;
+            const portfolioLink = document.getElementById('portfolio-view-link');
+            if (portfolioLink) {
+                portfolioLink.href = data.portfolio;
+                portfolioLink.onclick = (e) => trackEvent('portfolioViews');
+            }
+            const servicesGrid = document.getElementById('editable-services-grid');
+            servicesGrid.innerHTML = '';
+            (data.services || DEFAULT_DATA.services).forEach(service => {
+                const el = document.createElement('div');
+                el.className = 'service-item';
+                el.innerHTML = `
+                    <div class="service-icon"><i class="fas fa-cog"></i></div>
+                    <div class="service-name">${escapeHtml(service)}</div>
+                `;
+                servicesGrid.appendChild(el);
+            });
+            const pricingCards = document.getElementById('editable-pricing-cards');
+            pricingCards.innerHTML = '';
+            const renderPackage = (pkg, isPopular = false) => {
+                const card = document.createElement('div');
+                card.className = `pricing-card ${isPopular ? 'popular' : ''}`;
+                if (isPopular) {
+                    card.innerHTML = '<div class="popular-badge">MOST POPULAR</div>';
+                }
+                let featuresHtml = '';
+                (pkg.features || []).forEach(f => {
+                    featuresHtml += `<div class="pricing-feature"><i class="fas fa-check-circle"></i><span>${escapeHtml(f)}</span></div>`;
+                });
+                let eventType = 'starterClicks';
+                if (isPopular) eventType = 'professionalClicks';
+                else if (pkg.name.includes('Enterprise')) eventType = 'enterpriseClicks';
+                card.innerHTML += `
+                    <div class="pricing-header">
+                        <div class="pricing-name">${escapeHtml(pkg.name)}</div>
+                        <div class="pricing-price">${escapeHtml(pkg.price)}</div>
+                        <div class="pricing-duration">One-time payment</div>
+                    </div>
+                    <div class="pricing-features">${featuresHtml}</div>
+                    <a href="https://wa.me/${data.whatsapp}?text=I%20am%20interested%20in%20${encodeURIComponent(pkg.name)}"
+                       target="_blank" rel="noopener noreferrer"
+                       class="pricing-btn"
+                       onclick="trackEvent('${eventType}')">
+                        <i class="fab fa-whatsapp"></i> WhatsApp Now
+                    </a>
+                `;
+                return card;
+            };
+            pricingCards.appendChild(renderPackage(data.packages.starter));
+            pricingCards.appendChild(renderPackage(data.packages.professional, true));
+            pricingCards.appendChild(renderPackage(data.packages.enterprise));
+        }
+        // ============== INIT ==============
+        document.addEventListener('DOMContentLoaded', () => {
+            initAnalytics();
+            const saved = safeGet('businessCardData', {});
+            const data = {
+                name: saved.name || DEFAULT_DATA.name,
+                title: saved.title || DEFAULT_DATA.title,
+                phone: saved.phone || DEFAULT_DATA.phone,
+                email: saved.email || DEFAULT_DATA.email,
+                whatsapp: saved.whatsapp || DEFAULT_DATA.whatsapp,
+                website: saved.website || DEFAULT_DATA.website,
+                portfolio: saved.portfolio || DEFAULT_DATA.portfolio,
+                services: saved.services || DEFAULT_DATA.services,
+                packages: saved.packages || DEFAULT_DATA.packages
+            };
+            applyDataToDOM(data);
+        });
+        // ============== AVATAR UPLOAD ==============
+        document.getElementById('avatar-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Please upload a valid image file (JPEG, PNG, GIF, or WebP)');
+                    return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Image file size should be less than 5MB');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('profile-image');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        document.getElementById('profile-container').addEventListener('click', function(e) {
+            if (!e.target.closest('.profile-avatar')) {
+                document.getElementById('avatar-upload').click();
+            }
+        });
+        document.querySelector('.upload-overlay').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('avatar-upload').click();
+        });
+        // ============== ACTION HANDLERS ==============
+        function downloadVCard() {
+            trackEvent('vCardDownloads');
+            const data = safeGet('businessCardData', DEFAULT_DATA);
+            const phone = (data.phone || DEFAULT_DATA.phone).replace(/\s/g, '');
+            const vCardData = `BEGIN:VCARD
+VERSION:3.0
+N:Fernandes;Osborne;;;
+FN:${data.name || DEFAULT_DATA.name}
+TITLE:${(data.title || DEFAULT_DATA.title).replace(/\n/g, '\\n')}
+ORG:Freelancer
+TEL;TYPE=CELL:${phone}
+TEL;TYPE=WA:+${data.whatsapp || DEFAULT_DATA.whatsapp}
+EMAIL:${data.email || DEFAULT_DATA.email}
+URL:${data.website || DEFAULT_DATA.website}
+ADR:;;Angat, Bulacan, Philippines;;;
+NOTE:Professional digital business card
+END:VCARD`;
+            const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'OsborneFernandes.vcf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        function contactWhatsApp() {
+            trackEvent('whatsappClicks');
+            window.open(`https://wa.me/971505280169?text=Hello%20Osborne!%20I%20saw%20your%20digital%20card.`);
+        }
+        function shareCard() {
+            trackEvent('shares');
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Osborne Fernandes - Digital Card',
+                    url: window.location.href
+                });
+            } else {
+                alert('Sharing not supported. Copy this link: ' + window.location.href);
+            }
+        }
+    </script>
+</body>
+</html>
